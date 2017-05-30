@@ -1,4 +1,4 @@
-### React Notes
+﻿### React Notes
 * 在`JSX`语法中，标签的`class`属性需要写成`className`，`for`属性要写成`htmlFor`。因为`class`和`for`是`JavaScript`的保留字。
 * 标签的事件名都要写成驼峰规则：
     * 平时我们写的时候都是：`<p onclick='handleClick'>`
@@ -265,7 +265,7 @@
       render: function() {
         return (
           <div>
-            {this.state.username}'s last gist is
+            {this.state.username}s last gist is
             <a href={this.state.lastGistUrl}>here</a>.
           </div>
         );
