@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>index</title>
+		<style>
+			#c{
+				width: 100px;
+				height: 100px;
+				background-color: cornflowerblue;
+				margin: 240px auto;
+				display: block;
+				transition: 1s background,.2s border,.3s  box-shadow,1s  transform ease-in,1s  opacity ease-in;
+			}
+			.do{
+				border-color: rgba(0,0,0,0.6);
+				box-shadow: 0 0 20px blue;
+				transform: translate(-50px,-150px) rotateX(360deg) rotateY(720deg);
+				opacity: 0;
+			}
+		</style>
+	</head>
+	<body>
+		<img src="http://img3.imgtn.bdimg.com/it/u=772558024,760906670&fm=214&gp=0.jpg" id="c"/>
+		<script>
+			var img =document.getElementById('c');
+			img.on=true;
+			document.onclick=function(){
+				if(img.on){                      //第一次点击屏幕，图片翻转隐藏
+					img.on=false;
+					img.className='do';
+				}
+				else{                            //第二次点击屏幕，图片翻转出现
+					img.className='';
+					img.on='true';
+				}
+			}
+		</script>
+	</body>
+</html>
