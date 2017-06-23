@@ -1,4 +1,4 @@
-## CSS3笔记
+﻿## CSS3笔记
 > Transition 过渡
 
 * `transition-duration` 过渡时间
@@ -47,4 +47,4 @@
 * `perspective-origin` : 景深基点（值为:left/right/top/bottom）
 * `transform-origin` : 变换基点 （值为:left/right/top/bottom）
 
-> [Example Click Here](https://github.com/JieDreambuilder/learn-note-fontend/blob/master/CSSTransformTransition.html)
+> [Example Click Here](https://github.com/JieDreambuilder/learn-note-fontend/blob/master/examples/CSSTransformTransition.html)
