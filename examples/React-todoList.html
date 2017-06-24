@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>todoList</title>
+    <script src="https://cdn.bootcss.com/react/15.4.2/react.min.js"></script>
+	<script src="https://cdn.bootcss.com/react/15.4.2/react-dom.min.js"></script>
+	<script src="https://cdn.bootcss.com/babel-standalone/6.22.1/babel.min.js"></script>
+  </head>
+ <body>
+    <div id="message" align="center"></div>
+
+    <script type="text/babel">
+	var Todo = React.createClass({
+	    getInitialState: function() {
+	        return {text: []};
+	    },
+	    handleClick: function(event) {
+	        var tt=this.state.text;
+	        tt.push(this.refs.v.value)              //把表单值添加进组件数组
+	        this.setState({text: tt});              //重新渲染组件
+	        this.refs.h.hidden=true;                //任务不为空时，隐藏提示信息
+	        this.refs.v.value='';                   //添加任务后，置空表单
+	        this.refs.v.focus();                    //添加任务后，使表单获取输入焦点
+	    },
+	    handleDelete: function(event) {
+	        var tt=this.state.text;
+	        var targ=event.target.id;              //获取删除按钮的ID
+	        targ=parseInt(targ.substring(3));      //获取删除按钮的索引
+	        if(targ==targ){                        //利用  NaN 不等于 NaN  的特性，来判断用户点击的是不是删除按钮。
+	        	tt.splice(targ,1);
+	        	if(tt.length===0)
+		            this.refs.h.hidden=false;      //当所有任务都被删除后，显示提示信息“please add something.”。
+		        this.setState({text: tt})
+	        }
+	        
+	    },
+	    render: function() {
+	        var text = this.state.text;
+	        return <div onClick={this.handleDelete}>
+	            <p ref="h">please add something.</p>
+	            {text.map(function (currentValue,index) {
+	                return <p>{currentValue}<button id={'del'+index} >X</button></p>           //遍历数组输出
+	            })}
+	            <input type="text" ref="v"/><button onClick={this.handleClick}>add</button>
+	        </div>;
+	    }
+	});
+	ReactDOM.render(
+	    <Todo />,
+	    document.getElementById('message')
+	);
+    </script>
+  </body>
+</html>

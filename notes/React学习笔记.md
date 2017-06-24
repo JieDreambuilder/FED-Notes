@@ -324,7 +324,9 @@
     );
     ```
 ------------------------------
+
 * 更多参考：
     * 阮一峰老师的[《React入门教程》](http://www.ruanyifeng.com/blog/2015/03/react.html)
     * [菜鸟React教程](http://www.runoob.com/react/react-tutorial.html)
     * [React 官网](https://facebook.github.io/react/)
+    * [React 组件例子](https://github.com/JieDreambuilder/learn-note-fontend/blob/master/examples/React-todoList.html)
