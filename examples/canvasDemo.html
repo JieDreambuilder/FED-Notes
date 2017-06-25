@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>index</title>
+		<style type="text/css">
+			*{margin:0;padding: 0;}
+			#c1{
+				background: white;
+				margin: 50px auto;
+				display: block;
+			}
+		</style>
+	</head>
+	<body bgcolor="black">
+		<canvas id="c1" width="400" height="400" ></canvas>
+		<script>
+			var oC=document.getElementById('c1');
+			var ogc=oC.getContext('2d');
+			oC.onmousedown=function(e){
+				var ev=e||event;
+				var l=ev.clientX-oC.offsetLeft;
+				var t=ev.clientY-oC.offsetTop;
+				ogc.moveTo(l,t);
+				document.onmousemove=function(ev){
+					ogc.lineTo(ev.clientX-oC.offsetLeft,ev.clientY-oC.offsetTop);
+					ogc.stroke();
+				};
+				document.onmouseup=function(){
+					document.onmouseup=null;
+					document.onmousemove=null;
+				}
+			}
+		</script>
+	</body>
+</html>
