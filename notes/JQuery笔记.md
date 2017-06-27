@@ -1,3 +1,4 @@
+
 * 关于this
     * 方法中默认返回的this是原生的this，若要使用Jquery 的方法，需要转换成Jquery对象：$(this).
 * html()、css()、val()、attr() 的共同特点：
@@ -193,3 +194,215 @@
 * get():
     * 将JQuery 对象转换成原生JS对象。
     * JQuery默认获取到的是一个集合，故get()中的参数作为集合的下标。如：get(0) 表示第一个元素。
+    * 参数必须有，因为只有一个元素也是一个集合。
+    ```javascript
+    $('#div').get(0).scrollHeight
+    ```
+* 获取元素宽高
+    * width() : 获取或设置元素宽度。   (width)
+    * innerWidth() : 获取或设置元素内部宽度 (width+padding)
+    * outerWidth() : 获取或设置元素宽度。(width+padding+border)
+    * outerWidth(true) : 获取或设置元素宽度。(width+padding+border+margin)
+    * 高度(height)的设置和获取也同上。
+    * 与原生获取的区别：
+        * 原生无法获取隐藏元素（display:none）的宽高。
+        * JQuery 可以获取隐藏元素（display:none）的宽高。
+* 获取可视区宽高：
+    * $(window).height() : 获取可视区的高；
+    * $(window).width() : 获取可视区的宽；
+    * $(document).height() : 获取文档的高（包含滚动条）；
+    * $(document).width() : 获取文档的宽（包含滚动条）；
+    * 滚动条中，元素进入可视区的判断：
+        ```html
+        <div><img _src="img/1.jpg"></div>
+        <div><img _src="img/2.jpg"></div>
+        <div><img _src="img/3.jpg"></div>
+        <div><img _src="img/4.jpg"></div>
+        <div><img _src="img/5.jpg"></div>
+        ```
+        ```javascript
+        toChange();
+        $(window).scroll(toChange);
+        function toChange(){
+        	$('img').each(function(i,elem){
+        		if( $(elem).offset().top < $(window).height() + $(document).scrollTop() ){
+        			$(elem).attr('src' , $(elem).attr('_src') );
+        		}
+        	});
+        }
+        ```
+* 获取滚动距离：
+    * scrollTop() : 获取或设置元素纵向滚动距离。
+    * scrollLeft() :  获取或设置元素横向滚动距离。
+    * 常用等量关系：
+        * 文档高度 - 可视区高度 = 滚动距离
+        * $(document).scrollTop()==$(document).height()-$(window).height()
+* 获取元素位置：
+    * offset() : 获取元素距离文档的距离。
+        * offset().left : 获取元素距离文档左侧距离（注意left不能加括号）。
+        * offset().top : 获取元素距离文档顶部距离。
+    * offsetParent() : 获取有定位的祖先元素。
+    * posistion() : 到有定位的祖先节点的距离（不认margin）。
+        * posistion().left : 到有定位的祖先节点的`左侧`距离。
+        * posistion().top : 到有定位的祖先节点的`顶部`距离。
+    * 获取有定位的祖先节点的距离：
+        * $('#div2').offset().left-$('#div2').offsetParent().offset().left
+        * $('#div2').offset().top-$('#div2').offsetParent().offset().top
+* 事件绑定和取消：
+    * JQuery 事件都是绑定形式的。如：
+    ```javascript
+    $(document).click(functiong(){
+        alert(1);
+    });
+    $(document).click(functiong(){
+        alert(2);
+    });
+    // 会弹出两次，分别为：
+    // 1
+    // 2
+    ```
+    * on() : 
+        * 绑定事件
+        ```javascript
+        $(document).on('click',function(){
+            alert(1);
+        });
+        ```
+        * 支持多事件写法
+        ```javascript
+        $(document).on('click mouseover',function(){
+            alert(1);
+        });
+        ```
+        * on() 绑定事件的命名空间：
+        ```javascript
+        $(document).on('click.abc',function(){
+           alert(1);
+        });
+        $(document).on('click.edf',function(){
+           alert(2);
+        });
+        // 点击屏幕，两个都会弹出。
+        ```
+    * off() :
+        * 取消事件
+        * 默认取消元素上的所有事件
+        * 参数可以取消指定事件
+        ```javascript
+        $(document).on('click mouseover',function(){
+            alert(1);
+            $(this).off('mouseover')
+        });
+        ```
+        * 通过click()等函数直接绑定的事件也可以调用该方法直接取消。
+        ```javascript
+        $(document).click(function(){
+            alert(1);
+            $(this).off()
+        });
+        ```
+        * 可以通过先清除事件再绑定事件来避免绑定多个重复事件：
+        ```javascript
+        $(document).click(function(){
+            $('#div').off('click').click(function(){
+                alert(1);
+            });
+            //这样即使写在document点击事件内，每次都先清除再绑定，始终只绑定了一个事件。
+        });
+        ```
+        * 可以通过清除指定命名空间的事件函数：
+        ```javascript
+        $(document).on('click.abc',function(){
+           alert(1);
+        });
+        $(document).on('click.edf',function(){
+           alert(2);
+        });
+        $(document).off('.abc');  //只弹出2
+        ```
+* 事件函数参数：
+    * e.pageX : 相对于文档的鼠标X轴坐标。
+    * e.pageY : 相对于文档的鼠标Y轴坐标。
+    * e.clientX : 相对于可视区的鼠标X轴坐标。
+    * e.clientY : 相对于可视区的鼠标Y轴坐标。
+    * e.target : 事件源
+    * e.which : 触发事件的按钮键值。（keydown事件函数中）
+    * e.ctrlKdy : 返回布尔值，ctrl 是否被按下。
+    * e.stopPropagation() : 阻止事件冒泡
+    * e.preventDefault() : 阻止浏览器默认事件
+    * 在事件处理函数中 return false : 既阻止冒泡，也阻止默认事件。
+    * e.delegateTarget : 事件委托元素。
+* 事件委托:
+    * delegate() : 绑定委托事件。
+        * 第一个参数为事件源
+        * 第二个参数为事件类型
+        * 第三个参数为事件处理函数
+        * 事件处理函数中的 this 指向触发事件的元素
+    * undelegate() : 解除事件委托
+        * 调用者必须是被委托事件的元素（e.delegateTarget）。
+        * `$(e.delegateTarget).undelegate()`
+* 主动触发事件：
+    * trigger() : 主动触发事件，参数为触发的事件类型。
+    * 可以触发指定命名空间的事件：
+    ```javascript
+    $(document).on('click.abc',function(){
+       alert(1);
+    });
+    $(document).on('click.edf',function(){
+       alert(2);
+    });
+    $(document).trigger('click.abc');  
+    //只弹出2
+    ```
+* 工具方法：
+    * $.type() : 返回括号内参数的类型。
+    * $.isFunction() : 判断是不是函数。
+    * $.isNumberic() : 判断是不是数字。
+        * 注意："123" 也会被认为是数字。
+    * $.isArray() : 判断是不是数组。
+    * $.isWindow() : 判断是不是窗口。
+    * $.isEmptObject() : 判断是不是空对象。
+    * $.isPlainObject() : 判断是不是自变量对象。如：`new Object()`、`{name:'handsome'}`
+    * $.extend() : 
+        * 对象继承操作
+        * 深拷贝操作：
+            * 默认是浅拷贝
+            * 深拷贝第一个参数要设为true
+            * 支持多个对象的拷贝。
+                * 浅拷贝从第二个参数以后的参数都拷贝给第一个参数。
+                * 深拷贝从第三个参数以后的参数都拷贝给第二个参数。
+            ```javascript
+            var a={name:{age:20}};
+            var b={};
+            $.extend(true,b,a); 
+            b.name.age=30;
+            console.log(a.name.age) //20
+            ```
+    * $.proxy() : 
+        * 修改this的指向。
+        * 与call、apply 的区别：
+            * 仅改变this指向，不会调用该目标函数。
+        * 用法:
+            * 第一个参数为目标函数。
+            * 第二个参数为this指向。
+            * 第三个以后的参数作为目标函数的参数。
+        ```javascript
+        function show(x,y){
+            alert(x);
+            alert(y);
+            alert(this);
+        };
+        
+        //仅改变this
+        $.proxy(show,window);
+        
+        //改变this并调用函数
+        $.proxy(show,window,3,4)();
+        
+        //或者
+        $.proxy(show,window)(3,4);
+        
+        //又或者
+        $.proxy(show,window,3)(4);
+        ```
+        
