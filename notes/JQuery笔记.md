@@ -405,4 +405,104 @@
         //又或者
         $.proxy(show,window,3)(4);
         ```
-        
+    * $.parseJSON() : 将对象形式的字符串转换成对象。
+        * 对象形式的字符串必须是严格模式的（key，value都要带引号）。
+* 显示和隐藏：
+    * show() : 显示
+        * 参数可以直接写运动完成的时间，单位为毫秒。
+        * 参数还可以写 fast、 normal、 slow。
+        * 其中fast=200ms、normal=400ms、slow=600ms
+    * hide() : 隐藏
+        * 参数的设置同上
+    * toggle() :切换状态
+        * 参数的设置同上
+* 淡入和淡出：
+    * fadeIn()　 淡入
+    * fadeOut()　 淡出
+    * fadeToggle()　 切换状态
+* 上滑和下滑：
+    * slideUp()　: 上滑
+    * slideDown()　: 下滑
+    * slideToggle() : 切换状态
+* animate() 运动：
+    * 参数的设置：
+        * 第一个参数：{}，配置需要改变的属性和值。
+        * 第二个参数 : 配置时间，默认是400。
+        * 第三个参数：设置运动形式，只有两种 swing(默认 : 缓冲 : 慢快慢)  linear(匀速的)。
+        * 第四个参数：回调函数。
+    * 参数的第二种设置形式：
+        * 第一个参数：{}，配置需要改变的属性和值，该参数不能为一个空对象。
+        * 第二个参数：{}。
+            * 配置运动时间（duration）
+            * 运动形式（easing）
+            * 回调函数（complete）
+            * step ()：
+                * step 的第一个参数为定时器每一次变动的属性变化值。
+                * step 的第二个参数为一个Tween对象，其中pos属性表示运动起点与运动终点的比例。
+    ```javascript
+    $('#div1').animate({
+	    width : 300
+	},{
+	    duration : 1000,
+	    easing : 'linear',
+	    complete : function(){
+	    	//alert(123);
+	    },
+	    step : function(a,b){     //可以检测我们定时器的每一次变化
+	   	//console.log(a);
+	    	console.log(b.pos);   //运动过程中的比例值(0~1)
+        }
+	});
+    ```
+    * delay() : 运动的延迟
+        * 参数为延迟的时间，单位为毫秒。
+    * 运动队列
+        * 运动是按代码的编写顺序加入运动队列的，前一个运动未结束，后一个运动不会执行。
+    * 结束运动：
+        * stop(): 只会停止当前运动。
+        * stop(true): 可以停止所有的运动。
+        * stop(true,true): 可以停止当前运动，并直接到达运动终点。
+        * finish(): 停止所有运动，并直接到达运动终点。
+    * 快速触发运动事件导致运动队列过长的问题：
+        * 先调用stop()清空队列后再添加运动。
+        `$(this).stop().animate({width:200,height:200});`
+* 异步请求
+    * $.ajax(): 
+        * 参数为一个对象。
+        * 可设置的对象属性：
+            * url : 提交请求地址。
+            * data : 需要提交的数据。
+            * type : 提交的方式。（默认的提交方式为get，一般都使用post）
+            * success : 请求成功后的回调函数。
+            * error : 请求失败的回调函数。
+            * dataType : 设置返回数据类型。常用的是json。
+            * async : 是否异步。（默认为异步）
+    ```javascript
+    $.ajax({
+        url:'login.phh',
+        data:{username:'admin',psd:'admin'},
+        dataType:'json',
+        success :function(data){
+            console.log(data);
+        },
+        error : function(e){
+            console.log(e);
+        }
+    });
+    ```
+    * $.post():
+        * 第一个参数为目的 URL。
+        * 第二个参数为提交的数据。
+        * 第三个参数为请求成功的回调函数。
+        * 第四个参数为返回的数据类型。
+    ```javascript
+    $.post('doLogin.php',{username:'admin',psd:'admin'},function(data){
+        console.log(data);
+    },'json').error(function(e){
+        console.log(e);
+    });
+    ```
+    * $.get():
+        * 参数设置同上。
+        * 使用方式同上。
+      
