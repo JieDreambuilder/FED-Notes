@@ -10,7 +10,8 @@
 
 > ### 加载
 
-* $(function(){ // }); 的功能与 window.onload=function(){} 类似
+* `$(function(){});` ：DOM节点加载完后执行。
+* `window.onload=function(){};` ：整个页面加载完后执行。
 
 > ### 属性选择
 
@@ -404,10 +405,11 @@ $('#div').get(0).scrollHeight
 * e.clientX : 相对于可视区的鼠标X轴坐标。
 * e.clientY : 相对于可视区的鼠标Y轴坐标。
 * e.target : 事件源
-* e.which : 触发事件的按钮键值。（keydown事件函数中）
+* e.which : 触发事件的按钮键值。（keydown事件函数中，mousedown事件函数中可获取鼠标键值）
 * e.ctrlKdy : 返回布尔值，ctrl 是否被按下。
-* e.stopPropagation() : 阻止事件冒泡
-* e.preventDefault() : 阻止浏览器默认事件
+* e.stopPropagation() : 阻止事件冒泡。
+* e.stopImmediatePropagation() : 组织该节点所有事件冒泡，必须写在其他事件前才起作用。
+* e.preventDefault() : 阻止浏览器默认事件。
 * 在事件处理函数中 return false : 既阻止冒泡，也阻止默认事件。
 * e.delegateTarget : 事件委托元素。
 * e.originalEvent : 获取原生事件对象。
@@ -497,6 +499,59 @@ $('#div').get(0).scrollHeight
         
 * $.parseJSON() : 将对象形式的字符串转换成对象。
     * 对象形式的字符串必须是严格模式的（key，value都要带引号）。
+* $.merge() : 合并数组。
+* $.map() : 遍历修改数组。
+
+    ```javascript
+    var arr = ['a','b','c'];
+    arr = $.map(arr,function(val,i){
+    return val + i;
+    });
+    ```
+* $.grep() : 过滤数组元素。
+
+    ```javascript
+    var arr = [1,5,3,8,2];
+	
+	arr = $.grep(arr,function(val,i){
+		return val > 4;
+	});
+    ```
+* $.unique() : 只是针对DOM节点的去重方法
+
+    ```javascript
+    var aDiv = $('div').get();
+    
+	var arr = [];
+	
+	for(var i=0;i<aDiv.length;i++){
+		arr.push(aDiv[i]);
+	}
+	
+	console.log(arr);
+	
+	arr = $.unique(arr);
+    ```
+
+* $.inArray() : 类似于 indexOf()
+    ```javascript
+    var arr = ['a','b','c','d'];
+	
+	console.log($.inArray('b',arr));  //1
+    ```
+
+* $.makeArray() : 转数组的
+    ```javascript
+    var aDiv = document.getElementsByTagName('div');
+	
+	aDiv = $.makeArray(aDiv);
+	
+	aDiv.push();
+	
+	console.log(aDiv);
+    ```
+
+* $.trim() : 去除字符串首尾空格。
 
 > ### 显示和隐藏
 
@@ -596,12 +651,38 @@ $('#div').get(0).scrollHeight
     });
     ```
     
+    * $.param() : 将对象参数转为URL参数形式的字符串。
+    
+    ```javascript
+    var obj = { "name":"hello","age":"20" };
+	
+	obj = $.param( obj );
+	
+	console.log( obj );// name=hello&age=20
+    ```
+    
+    * serialize(): 获取并拼接表单中的name和value值。
+    
+    ```javascript
+    var a = $('form').serialize();
+    console.log( a );  //a=1&b=2&c=3
+    ```
+    
+    * serializeArray(): 获取并拼接表单中的name和value值，拼接成对象数组。
+    
+    ```javascript
+    var a = $('form').serializeArray(); 
+    console.log( a );
+    //[{ name:"a", value:"1"},{ name:"b", value:"2"}, { name:"c",value:"3"}]
+    ```
+    
 * $.post():
     * 第一个参数为目的 URL。
     * 第二个参数为提交的数据。
     * 第三个参数为请求成功的回调函数。
     * 第四个参数为返回的数据类型。
     
+
     ```javascript
     $.post('doLogin.php',{username:'admin',psd:'admin'},function(data){
         console.log(data);
@@ -613,6 +694,28 @@ $('#div').get(0).scrollHeight
 * $.get():
     * 参数设置同上。
     * 使用方式同上。
+
+* $.getJSON():
+
+    ```javascript
+    $.getJSON('data.php?callback=?',function(data){
+		console.log(data);
+	}).error(function(err){
+		console.log(err);
+	});   
+    ```
+
+* 默认配置：
+    * $.ajaxSetup()
+    
+    ```javascript
+    
+    $.ajaxSetup({
+	    type : 'POST'
+	});
+	
+    ```
+
 
 > ### 删除节点
 
@@ -641,3 +744,70 @@ $('#div').get(0).scrollHeight
 > ### one()
 
 * 只执行一次的事件，绑定方式与on()相同。
+
+> ### triggerHandler()
+
+* 主动触发事件
+* 与trigger()的区别：不会触发浏览器的默认事件。
+
+> ### JQ的截止从操作
+
+* nextUntil() ： 下一个兄弟节点，直到符合参数的筛选条件才停止。
+* prevUntil() : 上一个兄弟节点，直到符合参数的筛选条件才停止。
+* parentsUntil() : 上一个祖先节点，直到符合参数的筛选条件才停止。
+
+> ### 数据缓存
+
+* data() : 将键值对与节点绑定。
+    * `$('#div').data('say','hello')`
+    * `$('#div').data('say')   //hello`
+    * 不会设置行间属性，不会存在内存泄露。
+* prop() : 设置节点的自定义属性。
+    * 设置行间属性。
+    * 源码中调用 `.`和`[]` 直接设置/读取属性。
+* attr() : 设置节点的属性。
+    * 设置行间属性。
+    * 源码中调用 `setAttribute()`和`getAttribute()` 设置/读取属性。
+* 删除：
+    * removeData()
+    * removeProp()
+    * removeAttr()
+
+> ### JSON形式的设置
+
+* on()、css()、attr()
+
+    ```javascript
+    $('div').on({
+        click:function(){
+            //do something
+        },
+        mouseover:function(){
+            //do something
+        }
+    });
+    
+    $('div').css({
+        width:'100px',
+        height:'100px',
+        background:'red'
+    });
+    
+    $('div').attr({
+        title:'title',
+        href:'http://127.0.0.1'
+    });
+    ```
+
+> ### 回调形式的设置
+
+* addClass()、html()、val()
+* 原理：函数的返回值作为参数
+
+```javascript
+$('div').addClass(function(i,oldClass){
+	console.log(i);
+	console.log(oldClass);
+	return 'box'+(i+1);
+});
+```
