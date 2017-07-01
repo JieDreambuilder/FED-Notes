@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+		<title>index</title>
+		<style type="text/css">
+			*{margin:0;padding: 0;}
+			li{list-style: none;}
+			#tab1 div{border: 1px solid #000;width: 100px;height: 100px;display: none;}
+			#tab1 .active{display: block;}
+			input{width: 20px;}
+		</style>
+	</head>
+	<body>
+		<div id="tab1">
+			<input type="button" name="" value="1" style="background: red;">
+			<input type="button" name="" value="2">
+			<input type="button" name="" value="3">
+			<div class="active">1</div>
+			<div>2</div>
+			<div>3</div>
+		</div>
+		<script>
+			$('#tab1').find('input').click(function () {
+				$(this).css('background','red').siblings('input').css('background','');
+				$('#tab1').find('div').eq($(this).index('input')).css('display','block').siblings('div').css('display','none');
+			})
+		</script>
+	</body>
+</html>

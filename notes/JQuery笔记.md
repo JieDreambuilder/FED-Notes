@@ -165,6 +165,20 @@ $('#tab1').find('input').click(function () {
 </script>
 ```
 
+* end() 链式后退操作
+
+```javascript
+$('div').next().css('background','red').end().css('color','blue');
+```
+
+* addBack() 、add() 后退添加链式操作
+
+```javascript
+$('div').next().css('background','red').addBack().css('color','blue');
+	
+$('div').add('span').css('background','red');
+```
+
 > ### each() 遍历
 
 * 参数：一个含有两个参数的匿名函数。
@@ -552,6 +566,21 @@ $('#div').get(0).scrollHeight
     ```
 
 * $.trim() : 去除字符串首尾空格。
+* $.each() : 遍历元素，既可以遍历数组，也可以遍历对象。
+
+```javascript
+$('div').each(function(){});
+
+var arr = ['a','b','c'];
+
+var obj = { 'name' : 'hello' , 'age' : '20' };
+
+$.each(obj,function(i,val){
+	console.log(i);
+	console.log(val);
+});
+```
+
 
 > ### 显示和隐藏
 
@@ -811,3 +840,162 @@ $('div').addClass(function(i,oldClass){
 	return 'box'+(i+1);
 });
 ```
+
+> ### 防止库之间冲突
+
+* $. noConflict()
+
+```javascript
+var J = $.noConflict();                  
+
+J('#div').css('background','red');
+
+J.trim('   hello   ');
+```
+
+> ### 队列
+
+* $.queue() : 入队
+* $.dequeue() : 出队
+* 入队的元素只能是函数。
+* 参数：
+    * 绑定队列的元素
+    * 队列的名字
+    * 入队的函数
+* 每次出队操作都会执行一次出队的函数。
+
+
+```javascript
+function a(){
+	alert(1);
+}
+
+function b(){
+	alert(2);
+}
+
+function c(){
+	alert(3);
+}*/
+
+$.queue( document , 'miaov' , a );
+$.queue( document , 'miaov' , b );
+$.queue( document , 'miaov' , c );
+
+$.dequeue( document , 'miaov' );
+$.dequeue( document , 'miaov' );
+$.dequeue( document , 'miaov' );
+```
+* 原生中默认队列名为 `fx`
+* 还可以这样调用：`$('div').queue()`、`$('div').dequeue()`
+
+```javascript
+$('div').animate({width : 200});
+//$('div').delay(2000);
+$('div').queue('fx',function(){
+	setTimeout(function(){
+		$('div').dequeue();
+		//若没有出队操作，之后的队列元素都不会执行。
+		//（跟在售票窗买了票还待在窗口前不走一样，导致后面的人不能买票）
+	},2000);
+});
+$('div').animate({height : 200});
+$('div').animate({left : 200});
+
+```
+
+> ### Callbacks 回调对象
+
+* 参数：
+    * `$.Callbacks('once');` : 只触发一次。
+    * `$.Callbacks('memory');` : 写在 fire() 后面的 add() 也能被添加。
+    * `$.Callbacks('unique');` : 去除重复的项。
+    * `$.Callbacks('stopOnFalse');` : 函数中 return false 就停止后续执行。
+    * 可以混合使用，参数用空格隔开：`$.Callbacks('once unique');`
+* add() : 添加
+* remove() : 移除
+* fire() : 触发
+
+
+```javascript
+function a(){
+	alert(1);
+}
+function b(){
+	alert(2);
+}
+function c(){
+	alert(3);
+}
+
+var cb = $.Callbacks();
+
+cb.add(a);
+cb.add(b);
+cb.fire();  //1,2
+cb.add(c);
+cb.remove(a);
+cb.fire();  //2,3
+
+```
+
+* 使用场景：
+
+```javascript
+var cb = $.Callbacks();
+	
+function a(){
+	alert(1);
+}
+(function(){
+    function b(){
+    	alert(2);
+    }
+    cb.add(a);
+    cb.add(b);
+})();
+
+cb.fire();  //1,2
+
+```
+
+> ### $.Deferred() 延迟对象
+
+* 基于Callbacks的衍生对象。
+* deferred.done(): 添加事件处理函数，当事件状态为`resolved`时，里面的处理函数会被执行。
+* deferred.fail(): 添加事件处理函数，当事件状态为`rejected`时，里面的处理函数会被执行。
+* deferred.isRejected() :是否调用过 reject()。
+* deferred.isResolved() : 是否调用过 resolve()。
+
+```javascript
+var dfd = $.Deferred();
+
+setTimeout(function(){
+	
+	alert(1);
+	//dfd.resolve();   1,2
+	dfd.reject();    // 1,3
+	
+},1000);
+
+dfd.done(function(){
+	alert(2);
+});
+dfd.fail(function(){
+	alert(3);
+});
+```
+
+```javascript
+$.ajax('xxx.php').done(function(){}).fail(function(){});
+```
+
+> ### 插件的编写
+
+* $.fn.extend() : 扩展静态方法。
+* $.extend() : 扩展实例方法。
+* 基本格式：
+    * 配置参数
+    * 方法
+    * 自定义事件
+* [一个TAB选项卡插件例子](https://github.com/JieDreambuilder/learn-note-fontend/blob/master/examples/JQ-TABS-Extension.html)

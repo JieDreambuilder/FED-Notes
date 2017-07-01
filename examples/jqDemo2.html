@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+		<title>index</title>
+		<style type="text/css">
+			*{margin:0;padding: 0;}
+			li{list-style: none;}
+			ul{display: block; margin: 50px auto;width: 200px;height: 200px;}
+		</style>
+	</head>
+	<body>
+		<ul>
+			<li>1.<input type="button" name="" value="上移"><input type="button" name="" value="下移"></li>
+			<li>2.<input type="button" name="" value="上移"><input type="button" name="" value="下移"></li>
+			<li>3.<input type="button" name="" value="上移"><input type="button" name="" value="下移"></li>
+			<li>4.<input type="button" name="" value="上移"><input type="button" name="" value="下移"></li>
+		</ul> 
+		<script>
+			$('input[value=上移]').click(function () {
+				var $nList =$(this).closest('li');
+				var $preList=$nList.prev();
+				if($preList.length!==0){
+					$nList.insertBefore($preList);
+				}else{
+					$nList.appendTo($nList.parent());
+				}
+			});
+			$('input[value=下移]').click(function () {
+				var $nList =$(this).closest('li');
+				var $preList=$nList.next();
+				if($preList.length!==0){
+					$nList.insertAfter($preList);
+				}else{
+					$nList.prependTo($nList.parent());
+				}
+			});
+		</script>
+	</body>
+</html>

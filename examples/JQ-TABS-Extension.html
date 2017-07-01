@@ -1,0 +1,85 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>无标题文档</title>
+<style>
+#tab div{ width:200px; height:200px; border:1px #000 solid; display:none;}
+#tab .active{ background:red;}
+</style>
+<script src="https://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+<script>
+
+(function($){
+	var defaults={
+		heads:['1','2','3'],
+		bodys:['111111111','22222222','3333333'],
+		events:'click'
+	};
+
+	var settings={};
+	var $parent=null;
+
+	function fnTab(options){
+		$parent= this;
+		settings=$.extend(settings,defaults,options);
+
+		create();
+		bind();
+	}
+
+	function create(){
+		for(var i=0;i<settings.heads.length;i++){
+			var $btn=$('<button>'+settings.heads[i]+'</button>');
+			$parent.append($btn);
+		}
+
+		for (var i = 0 ;i<settings.bodys.length; i++) {
+			var $div =$('<div>'+settings.bodys[i]+'</div>');
+			$parent.append($div);
+		}
+		$parent.find('button').eq(0).attr('class','active');
+		$parent.find('div').eq(0).css('display','block');
+
+	};
+
+	function bind(){
+		$parent.find('button').on(settings.events,function () {
+			$parent.trigger('beforeChange');
+			$(this).attr('class','active').siblings('button').attr('class','');
+			$parent.find('div').eq($(this).index()).css('display','block').siblings('div').css('display','none');
+			$parent.trigger('afterChange');
+		})
+	};
+
+	$.fn.extend({
+		tabs:fnTab
+	});
+
+})(jQuery);
+
+$(function(){
+
+	$('#tab').tabs({
+		heads:['新闻','笑话','娱乐八卦','电影推荐','买车','股市'],
+		bodys:['新闻11111111','笑话22222222','娱乐八卦33333333','电影推荐4444444','买车55555555','股市66666666'],
+		events:'mouseover'
+	});
+
+	$('#tab').on('beforeChange',function () {
+		console.log($(this).find('div:visible').html())
+	})
+
+	$('#tab').on('afterChange',function () {
+		console.log($(this).find('div:visible').html())
+	})
+});
+
+</script>
+</head>
+
+<body>
+<div id="tab">
+</div>
+</body>
+</html>
