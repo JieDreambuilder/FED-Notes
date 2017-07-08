@@ -13,13 +13,45 @@
 * `$(function(){});` ：DOM节点加载完后执行。
 * `window.onload=function(){};` ：整个页面加载完后执行。
 
-> ### 属性选择
+> ### 根据属性选择元素
 
 * $('div'[id=123]) 表示选择ID=111 的DIV元素。
 * [^=]  检索开头，$('div'[id^=12]) 表示选择 ID以 12 开头 的DIV元素。
 * [$=]  检索结尾，$('div'[id$=12]) 表示选择 ID 以 12 结尾的DIV元素。
 * [\*=]  检索包含，$('div'[id\*=12]) 表示选择 ID中含有 12 的DIV元素。
 * 引号问题： 当检索值中含有空格时必须用引号括起来，如 $('div'[class^="box box1"])
+
+> ### sizzle选择器
+
+* 通用选择:`*`，选择所有元素。
+    * `$('#div').find('*')`，选择DIV下的所有元素。
+* 层级选择：
+    * `>`: 子级关系。
+    * `+`: 符合条件的下一个兄弟节点。
+    * `~`: 符合条件的剩余兄弟节点。
+    
+    ```javascript
+    $('div > span').css('border','1px red solid');
+	
+	$('p + span').css('border','1px red solid');
+	
+	$('p ~ span').css('border','1px red solid');
+    ```
+
+> ### JQ集合筛选
+
+* 注意链式操作的实际对象
+* filter()   
+* not()
+* has()
+
+```javascript
+$('div').filter('.box').css('background','red');
+		
+$('div').not('.box').css('background','red');
+
+$('div').has('.box').css('background','red');
+```
 
 > ### 链式操作（一般用于设置属性的时候）
 
