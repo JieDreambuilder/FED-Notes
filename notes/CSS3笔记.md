@@ -41,6 +41,7 @@
     * opera : -o-
 * `rotateX()`: 绕X轴旋转
 * `rotateY()`: 绕Y轴旋转
+* `rotateZ()`: 绕Z轴旋转
 * `translateZ()`: 绕Z轴移动（近大远小）
 * `transform-style:preserve-3d;` : 建立3D场景
 * `perspective` : 景深（值为像素或其他单位）
