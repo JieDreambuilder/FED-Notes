@@ -18,11 +18,13 @@
 				$('.newBtn').click(function(){
 					var newEle=$('<tr><td class="check"><input type="checkbox" /></td><td></td><td></td><td></td><td></td></tr>');
 					$('tbody').append(newEle)
+					count()
 				})
 				
 				//删除按钮
 				$('.delBtn').click(function(){
 					$('input:checked').closest('tr').remove()
+					count()
 				})
 				
 				//全选按钮
@@ -36,12 +38,25 @@
 							$(ele).closest('tr').removeClass('selectedCB')
 						}
 					})
+					count()
 				})
 				
 				//复选框操作
-				$('tbody').delegate('.check','click',function(){
+				$('tbody').delegate('.check input','click',function(){
 					$(this).closest('tr').toggleClass('selectedCB')
+					count()
 				})
+				
+				//计算总价方法
+				function count(){
+					var co=0;
+					$('input:checked').not('.checkAll').each(function(i,ele){
+						var pr=parseInt(($(ele).closest('tr').find('.price').html()));
+						var nu=parseInt(($(ele).closest('tr').find('.num').html()));
+						co+=pr*nu;
+					})
+					$('.count').html(co)
+				}
 				
 				
 				var name = $("tbody");  
@@ -71,10 +86,13 @@
 			        //文本框失去焦点的时候变为文本  
 			        inputObj.blur(function () {   
 			            var newText = $(this).val();  
-			            tdObj.html(newText);          
+			            tdObj.html(newText);    
+			            //计算总价
+			        	count()
 			        });  
 			        //全选  
-			          inputObj.trigger("focus").trigger("select");  
+			          inputObj.trigger("focus").trigger("select"); 
+			        
 			    });  
 			    
 			})
@@ -101,32 +119,32 @@
 					<td class="check"><input type="checkbox" /></td>
 					<td>1</td>
 					<td>苹果</td>
-					<td>5</td>
-					<td>10</td>
+					<td class="price">5</td>
+					<td class="num">10</td>
 				</tr>
 				<tr>
 					<td class="check"><input type="checkbox" /></td>
 					<td>1</td>
 					<td>苹果</td>
-					<td>5</td>
-					<td>10</td>
+					<td class="price">5</td>
+					<td class="num">10</td>
 				</tr>
 				<tr>
 					<td class="check"><input type="checkbox" /></td>
 					<td>1</td>
 					<td>苹果</td>
-					<td>5</td>
-					<td>10</td>
+					<td class="price">5</td>
+					<td class="num">10</td>
 				</tr>
 				<tr>
 					<td class="check"><input type="checkbox" /></td>
 					<td>1</td>
 					<td>苹果</td>
-					<td>5</td>
-					<td>10</td>
+					<td class="price">5</td>
+					<td class="num">10</td>
 				</tr>
 			</tbody>
 		</table>
-		<p>总计：￥<span class="tatol"></span></p>
+		<p>总计：￥<span class="count">0</span></p>
 	</body>
 </html>
