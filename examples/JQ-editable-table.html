@@ -16,21 +16,27 @@
 			$(function(){
 				//新增按钮的操作
 				$('.newBtn').click(function(){
-					var newEle=$('<tr><td class="check"><input type="checkbox" /></td><td></td><td></td><td></td><td></td></tr>');
+					var newEle=$('<tr><td class="check"><input type="checkbox" /></td><td></td><td></td><td class="price"></td><td class="num"></td></tr>');
 					$('tbody').append(newEle)
+					if($('.checkAll').prop('checked')){
+						checkAll()
+					}
+						
 					count()
 				})
 				
 				//删除按钮
 				$('.delBtn').click(function(){
-					$('input:checked').closest('tr').remove()
+					$('input:checked:not(".checkAll")').closest('tr').remove()
 					count()
 				})
 				
 				//全选按钮
-				$('.checkAll').click(function(){
-					$('input[type=checkbox]').prop('checked',$(this).prop('checked'))
-					$('input[type=checkbox]').each(function(i,ele){
+				$('.checkAll').click(checkAll)
+				
+				function checkAll(){
+					$('input[type=checkbox]:not(".checkAll")').prop('checked',$('.checkAll').prop('checked'))
+					$('input[type=checkbox]:not(".checkAll")').each(function(i,ele){
 						var flag=$(ele).prop('checked');
 						if(flag){
 							$(ele).closest('tr').addClass('selectedCB')
@@ -39,10 +45,10 @@
 						}
 					})
 					count()
-				})
+				}
 				
 				//复选框操作
-				$('tbody').delegate('.check input','click',function(){
+				$('tbody').delegate('.check>input:not(".checkAll")','click',function(){
 					$(this).closest('tr').toggleClass('selectedCB')
 					count()
 				})
@@ -51,6 +57,9 @@
 				function count(){
 					var co=0;
 					$('input:checked').not('.checkAll').each(function(i,ele){
+						//若价格为空则跳过
+						if($(ele).closest('tr').find('.price').html()=='')
+							return;
 						var pr=parseInt(($(ele).closest('tr').find('.price').html()));
 						var nu=parseInt(($(ele).closest('tr').find('.num').html()));
 						co+=pr*nu;
