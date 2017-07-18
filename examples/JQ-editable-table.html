@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<style>
+			*{margin: 0;padding: 0;}
+			table{text-align: center;margin: 50px auto;border: 1px solid black;}
+			td,th{padding: 10px;}
+			.btn{margin: 50px auto;text-align: center;}
+			p{margin: 20px auto;text-align: center;}
+			.selectedCB{background:deepskyblue;}
+		</style>
+		<script src="https://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
+		<script>
+			$(function(){
+				//新增按钮的操作
+				$('.newBtn').click(function(){
+					var newEle=$('<tr><td class="check"><input type="checkbox" /></td><td></td><td></td><td></td><td></td></tr>');
+					$('tbody').append(newEle)
+				})
+				
+				//删除按钮
+				$('.delBtn').click(function(){
+					$('input:checked').closest('tr').remove()
+				})
+				
+				//全选按钮
+				$('.checkAll').click(function(){
+					$('input[type=checkbox]').prop('checked',$(this).prop('checked'))
+					$('input[type=checkbox]').each(function(i,ele){
+						var flag=$(ele).prop('checked');
+						if(flag){
+							$(ele).closest('tr').addClass('selectedCB')
+						}else{
+							$(ele).closest('tr').removeClass('selectedCB')
+						}
+					})
+				})
+				
+				//复选框操作
+				$('tbody').delegate('.check','click',function(){
+					$(this).closest('tr').toggleClass('selectedCB')
+				})
+				
+				
+				var name = $("tbody");  
+			    //给这些单元格注册鼠标点击事件  
+			    
+			    //可编辑表格
+			    name.delegate('td:not(".check")','click',function (e) {  
+			        //找到当前鼠标单击的td  
+			        var tdObj = $(this);  
+			        //保存原来的文本  
+			        var oldText = $(this).text();  
+			        //创建一个文本框  
+			        var inputObj = $("<input type='text' value='" + oldText + "'/>");  
+			        //去掉文本框的边框  
+			        inputObj.css("border-width", 0);  
+			        inputObj.click(function () {  
+			            return false;  
+			        });  
+			        //使文本框的宽度和td的宽度相同  
+			        inputObj.width(tdObj.width());  
+			        inputObj.height(tdObj.height());  
+			        //去掉文本框的外边距  
+			        var style={"margin":0,"padding": 0,"text-align": "center","font-size":"16px","background-color":tdObj.css("background-color")}
+			        inputObj.css(style);  
+			        //把文本框放到td中  
+			        tdObj.html(inputObj);  
+			        //文本框失去焦点的时候变为文本  
+			        inputObj.blur(function () {   
+			            var newText = $(this).val();  
+			            tdObj.html(newText);          
+			        });  
+			        //全选  
+			          inputObj.trigger("focus").trigger("select");  
+			    });  
+			    
+			})
+		</script>
+	</head>
+	<body>
+		
+		<section class="btn">
+			<button class="newBtn">新增</button>
+			<button class="delBtn">删除</button>
+		</section>
+		<table border="1" cellspacing="0">
+			<thead>
+				<tr>
+					<th><input type="checkbox" class="checkAll" /></th>
+					<th>编号</th>
+					<th>名称</th>
+					<th>价格</th>
+					<th>数量</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td class="check"><input type="checkbox" /></td>
+					<td>1</td>
+					<td>苹果</td>
+					<td>5</td>
+					<td>10</td>
+				</tr>
+				<tr>
+					<td class="check"><input type="checkbox" /></td>
+					<td>1</td>
+					<td>苹果</td>
+					<td>5</td>
+					<td>10</td>
+				</tr>
+				<tr>
+					<td class="check"><input type="checkbox" /></td>
+					<td>1</td>
+					<td>苹果</td>
+					<td>5</td>
+					<td>10</td>
+				</tr>
+				<tr>
+					<td class="check"><input type="checkbox" /></td>
+					<td>1</td>
+					<td>苹果</td>
+					<td>5</td>
+					<td>10</td>
+				</tr>
+			</tbody>
+		</table>
+		<p>总计：￥<span class="tatol"></span></p>
+	</body>
+</html>
