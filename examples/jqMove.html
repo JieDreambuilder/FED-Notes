@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<style>
+			*{margin: 0;padding: 0;}
+			table{text-align: center;margin: 50px auto;border: 1px solid black;}
+			td,th{padding: 10px;}
+			.btn{margin: 50px auto;text-align: center;}
+			p{margin: 20px auto;text-align: center;}
+			.selectedCB{background:deepskyblue;}
+		</style>
+		<script src="https://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
+		<script>
+			$(function(){
+				
+				//初始化表格的 行索引
+				
+				var tbHeadSize=$('.tbhead').children().length;
+					
+				$('tr').not('tbhead').each(function(i,ele){
+					if($(ele).children().length==tbHeadSize){
+							$(ele).addClass('tr'+i)
+						$(ele).attr('data-index','tr'+i)
+					}else{
+							$(ele).addClass($(ele).prev().attr('data-index'))
+						$(ele).attr('data-index',$(ele).prev().attr('data-index'))
+					}
+				})
+				
+				
+				//上移按钮的操作
+				
+				
+				
+				$('.up').click(function(){
+					
+					
+					
+					var prevInputIndex=$('input:checked').closest('tr').prev().attr('data-index')
+					
+					
+					console.log(prevInputIndex)
+//					var selectTr=$('input[data-index="'+selectInputIndex+'"]')
+					var selectTr=$('input:checked').closest('tr')
+					
+					if (selectTr.index() != 0) { 
+						console.log($('tbody .'+prevInputIndex))
+						
+//						selectTr.remove();
+						$('tbody .'+prevInputIndex).eq(0).before(selectTr)
+					}
+				})
+				
+				//下移按钮
+				$('.down').click(function(){
+					
+				})
+				
+				
+				
+				
+				var name = $("tbody");  
+			    //给这些单元格注册鼠标点击事件  
+			    
+			    //可编辑表格
+			    name.delegate('td:not(".check")','click',function (e) {  
+			        //找到当前鼠标单击的td  
+			        var tdObj = $(this);  
+			        //保存原来的文本  
+			        var oldText = $(this).text();  
+			        //创建一个文本框  
+			        var inputObj = $("<input type='text' value='" + oldText + "'/>");  
+			        //去掉文本框的边框  
+			        inputObj.css("border-width", 0);  
+			        inputObj.click(function () {  
+			            return false;  
+			        });  
+			        //使文本框的宽度和td的宽度相同  
+			        inputObj.width(tdObj.width());  
+			        inputObj.height(tdObj.height());  
+			        //去掉文本框的外边距  
+			        var style={"margin":0,"padding": 0,"text-align": "center","font-size":"16px","background-color":tdObj.css("background-color")}
+			        inputObj.css(style);  
+			        //把文本框放到td中  
+			        tdObj.html(inputObj);  
+			        //文本框失去焦点的时候变为文本  
+			        inputObj.blur(function () {   
+			            var newText = $(this).val();  
+			            tdObj.html(newText);   
+			        });  
+			        //全选  
+			          inputObj.trigger("focus").trigger("select"); 
+			        
+			    });  
+			    
+			})
+		</script>
+	</head>
+	<body>
+		
+		<section class="btn">
+			<button class="up">上移</button>
+			<button class="down">下移</button>
+		</section>
+		<table border="1" cellspacing="0">
+			<thead>
+				<tr class="tbhead">
+					<th></th>
+					<th>编号</th>
+					<th>名称</th>
+					<th>价格</th>
+					<th>数量</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td rowspan="3" class="check"><input type="checkbox" /></td>
+					<td rowspan="3">1</td>
+					<td rowspan="3">苹果</td>
+					<td class="price">5</td>
+					<td class="num">10</td>
+				</tr>
+				<tr>
+					
+					<td class="price">5</td>
+					<td class="num">10</td>
+				</tr>
+				<tr>
+					
+					<td class="price">5</td>
+					<td class="num">10</td>
+				</tr>
+				<tr>
+					<td class="check"><input type="checkbox" /></td>
+					<td>1</td>
+					<td>苹果</td>
+					<td class="price">5</td>
+					<td class="num">10</td>
+				</tr>
+				<tr>
+					<td class="check"><input type="checkbox" /></td>
+					<td>1</td>
+					<td>苹果</td>
+					<td class="price">5</td>
+					<td class="num">10</td>
+				</tr>
+				<tr>
+					<td class="check"><input type="checkbox" /></td>
+					<td>1</td>
+					<td>苹果</td>
+					<td class="price">5</td>
+					<td class="num">10</td>
+				</tr>
+				<tr>
+					<td class="check"><input type="checkbox" /></td>
+					<td>1</td>
+					<td>苹果</td>
+					<td class="price">5</td>
+					<td class="num">10</td>
+				</tr>
+			</tbody>
+		</table>
+	</body>
+</html>
