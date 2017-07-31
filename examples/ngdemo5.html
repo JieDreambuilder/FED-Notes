@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
+		<script src="https://cdn.bootcss.com/angular.js/1.4.6/angular.min.js"></script>
+		<style>
+			#div1{height: 150px;width: 150px;background: red;border: 1px solid red;position: absolute;}
+		</style>
+		<script>
+			var app=angular.module('myApp',[]);
+			app.directive('myDrag',function(){
+				return {
+					restrict:'A',
+					link : function(scope,element,attr){
+						var disX=0;
+						var disY=0;
+						attr.myDrag=angular.equals(attr.myDrag,'true')
+						
+						
+						element.on('mousedown',function(ev){
+							var This=this;
+							disX=ev.pageX-$(this).offset().left;
+							disY=ev.pageY-$(this).offset().top;
+							
+							if(attr.myDrag){
+								var $sh=$('<div>')
+								$sh.css({
+									'position':'absolute',
+									'height':$(this).outerHeight(),
+									'width':$(this).outerWidth(),
+									'border':'1px gray dotted',
+									'left':$(this).offset().left,
+									'top':$(this).offset().top
+								})
+								$('body').append($sh)
+							}
+							
+							$(document).on('mousemove',function(e){
+								if(attr.myDrag){
+									$($sh).css('left',e.pageX-disX);
+									$($sh).css('top',e.pageY-disY);
+								}else{
+									$(This).css('left',e.pageX-disX);
+									$(This).css('top',e.pageY-disY);
+								}
+								
+							})
+							$(document).on('mouseup',function(e){
+								$(document).off('mousemove');
+								if(attr.myDrag){
+									$(This).css({
+										'left':$sh.offset().left,
+										'top':$sh.offset().top
+									})
+									$($sh).remove();
+								}
+								
+							})
+							ev.preventDefault()
+						})
+						
+					}
+					
+				}
+			})
+			app.controller('Aaa',['$scope',function($scope){
+				
+			}])
+		</script>
+	</head>
+	<body  ng-controller="Aaa">
+		<div my-drag="true" id="div1"></div>
+	</body>
+</html>

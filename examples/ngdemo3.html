@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://cdn.bootcss.com/angular.js/1.4.6/angular.min.js"></script>
+		<script>
+			var app=angular.module('myApp',[]);
+			app.controller('ctrl',['$scope','$filter',function($scope,$filter){
+				$scope.user=[
+					{name:'red',age:23},
+					{name:'blue',age:12},
+					{name:'green',age:33},
+					{name:'yellow',age:18},
+					{name:'black',age:47},
+				];
+				$scope.f=$scope.user;
+				$scope.sortFn=function(ar){
+					arguments.callee['Fn'+ar]=!arguments.callee['Fn'+ar];
+					$scope.f=$filter('orderBy')($scope.f,ar,arguments.callee['Fn'+ar])
+				}
+				$scope.search=function(){
+					$scope.f=$filter('filter')($scope.user,{name:$scope.ser})
+				}
+			}])
+			
+		</script>
+	</head>
+	<body>
+		<section ng-controller="ctrl">
+			<input ng-model="ser" type="text" ng-change="search()" />
+			<table cellspacing="0" border="1">
+				<tr>
+					<th ng-click="sortFn('name')">姓名</th>
+					<th ng-click="sortFn('age')">年龄</th>
+				</tr>
+				<tr ng-repeat=" u in f">
+					<td>{{u.name}}</td>
+					<td>{{u.age}}</td>
+				</tr>
+			</table>
+		</section>
+		
+		
+	</body>
+</html>

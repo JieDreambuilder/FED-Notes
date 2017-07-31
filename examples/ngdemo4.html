@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
+		<script src="https://cdn.bootcss.com/angular.js/1.4.6/angular.min.js"></script>
+		<style>
+			#div1 div,#div2 div {display: none;width: 100px;height: 100px;border: 1px solid red;}
+
+			#div1 input.active , #div2 input.active{ background:red;}
+		</style>
+		<script>
+			var app=angular.module('myApp',[]);
+			app.directive('helloWorld',function(){
+				return {
+					restrict:'AE',
+					replace:true,
+					//template:'<h1>hello-Wrold</h1>'
+					scope:{
+						myId:'@',
+						myData:'='
+					},
+					controller:['$scope',function($scope){
+						$scope.name='hell'
+					}],
+					templateUrl:'temp3.html',
+					link : function(scope,element,attr){
+						element.delegate('input','click',function(){
+							$(this).attr('class','active').siblings('input').attr('class','');
+							$(this).siblings('div').eq($(this).index()).css('display','block').siblings('div').css('display','')
+						})
+					}
+					
+				}
+			})
+			app.controller('Aaa',['$scope',function($scope){
+				
+				$scope.data1 = [
+					{title:'数学',content:'111111111'},
+					{title:'语文',content:'222222222'},
+					{title:'英语',content:'333333333'}
+				];
+				$scope.data2 = [
+					{title:'物理',content:'444444444'},
+					{title:'化学',content:'555555555'}
+				];
+			}])
+		</script>
+	</head>
+	<body  ng-controller="Aaa">
+		<hello-world my-id="div1" my-data="data1"></hello-world>
+		<hello-world my-id="div2" my-data="data2"></hello-world>
+	</body>
+</html>

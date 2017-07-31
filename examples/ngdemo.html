@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html ng-app="app">
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://cdn.bootcss.com/angular.js/1.4.6/angular.min.js"></script>
+	</head>
+	<body>
+		<script>
+			var app=angular.module('app',[]);
+			app.controller('ctr1',function($scope){
+				$scope.iphone={
+					price:50,
+					num:1
+				}
+				$scope.fre=10;
+				$scope.sum=function(){
+					return ($scope.iphone.price*$scope.iphone.num+$scope.fre)
+				}
+				$scope.$watch($scope.sum,function(newVal,oldVal){
+					$scope.fre=newVal>=100?0:10;
+				})
+			})
+		</script>
+		<div ng-controller="ctr1">
+			<label>商品价格:</label><input type="number" ng-model="iphone.price" /><br />
+			<label>商品数量:</label><input type="number" ng-model="iphone.num" /><br />
+			<label>商品运费:</label><span>{{fre | currency:'￥'}}</span><br />
+			<label>商品总价:</label><span>{{sum() | currency:'￥'}}</span><br />
+		</div>
+	</body>
+</html>
