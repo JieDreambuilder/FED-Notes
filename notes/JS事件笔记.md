@@ -1,5 +1,5 @@
-## 窗口
-  * 可视区的尺寸
+## 窗口事件
+  * 可视区的尺寸
   * `document.documentElement.clientHeight`
       * 可视区的高
   * `document.documentElenemt.clinetWidth`
